@@ -24,10 +24,11 @@
     </header>
 
     <main id="capture-area">
-        
         <div class="circuit-bg"></div>
 
         <section class="hero-section" id="hero-bg">
+            <div class="hero-bg-layer" id="hero-bg-layer"></div>
+            
             <div class="hero-overlay"></div>
             
             <div class="hero-bg-text">
@@ -35,13 +36,35 @@
                 <p id="bg-desc-display">"우리의 궤도는 우주가 멸망하기 전, 단 한 번 겹치도록 설계되었다."</p>
             </div>
             
-            <div class="hero-upload-ui ui-element upload-trigger">
-                <input type="file" class="hidden-input" accept="image/*">
-                <button class="btn-glass">⏏ 상단 배경 이미지 업로드</button>
+            <div class="hero-upload-ui ui-element">
+                <div id="bg-upload-trigger" class="upload-trigger">
+                    <input type="file" class="hidden-input" id="hero-main-upload" accept="image/*">
+                    <button class="btn-glass">⏏ 메인 포스터 업로드</button>
+                </div>
+                
+                <div class="bg-controls hide-ui" id="bg-controls">
+                    <div class="control-group">
+                        <label>확대</label>
+                        <input type="range" id="bg-scale" min="0.5" max="3" step="0.05" value="1">
+                    </div>
+                    <div class="control-group">
+                        <label>회전</label>
+                        <input type="range" id="bg-rotate" min="-180" max="180" step="1" value="0">
+                    </div>
+                    <div class="control-group">
+                        <label>X 이동</label>
+                        <input type="range" id="bg-x" min="-100" max="100" step="1" value="0">
+                    </div>
+                    <div class="control-group">
+                        <label>Y 이동</label>
+                        <input type="range" id="bg-y" min="-100" max="100" step="1" value="0">
+                    </div>
+                    <button id="bg-delete-btn" class="btn-delete-bg">🗑 배경 이미지 삭제</button>
+                </div>
             </div>
 
             <div class="hero-content">
-                <span class="badge theme-border theme-text" contenteditable="true" spellcheck="false">ARCH EXCLUSIVE</span>
+                <span class="badge theme-border theme-text" id="edit-badge" contenteditable="true" spellcheck="false">ARCH EXCLUSIVE</span>
                 <h2 class="anime-title" id="edit-title" contenteditable="true" spellcheck="false">작품의 타이틀을 입력하세요</h2>
                 <p class="anime-synopsis" id="edit-desc" contenteditable="true" spellcheck="false">"우리의 궤도는 우주가 멸망하기 전, 단 한 번 겹치도록 설계되었다."<br>이곳을 클릭해 장대한 SF 세계관과 시놉시스를 작성하세요.</p>
                 
@@ -58,27 +81,13 @@
         </section>
 
         <div class="main-content-grid">
-            
             <section class="panel-section left-panel">
                 <div class="panel-header">
                     <h3 class="section-title theme-text" contenteditable="true" spellcheck="false">EPISODE GUIDE</h3>
                     <button id="add-epi-btn" class="btn-glass ui-element theme-text">+ 회차 추가</button>
                 </div>
-                
                 <div class="episode-list" id="episode-list">
-                    <article class="episode-item">
-                        <button class="btn-delete btn-delete-epi ui-element">✕</button>
-                        <div class="epi-thumbnail bg-target upload-trigger">
-                            <input type="file" class="hidden-input" accept="image/*">
-                            <span class="upload-hint ui-element">+</span>
-                        </div>
-                        <div class="epi-details">
-                            <h4 contenteditable="true" spellcheck="false">제 1화: 프롤로그 - 조우의 궤도</h4>
-                            <p class="epi-runtime theme-text" contenteditable="true" spellcheck="false">24min</p>
-                            <p class="epi-desc" contenteditable="true" spellcheck="false">우주 정거장에서 운명적으로 조우한 두 사람. 엇갈린 연성 로그 속 숨겨진 진실이 밝혀진다.</p>
-                        </div>
-                    </article>
-                </div>
+                    </div>
             </section>
 
             <section class="panel-section right-panel">
@@ -86,22 +95,9 @@
                     <h3 class="section-title theme-text" contenteditable="true" spellcheck="false">CHARACTER & CASTING</h3>
                     <button id="add-char-btn" class="btn-glass ui-element theme-text">+ 캐릭터 추가</button>
                 </div>
-                
                 <div class="shorts-container" id="shorts-container">
-                    <div class="short-card">
-                        <button class="btn-delete btn-delete-char ui-element">✕</button>
-                        <div class="short-img bg-target upload-trigger">
-                            <input type="file" class="hidden-input" accept="image/*">
-                            <span class="upload-hint ui-element">이미지 업로드</span>
-                        </div>
-                        <div class="short-info">
-                            <h4 contenteditable="true" spellcheck="false">"이 우주가 끝나더라도, 난 네 손을 놓지 않아."</h4>
-                            <p class="cv-text theme-text" contenteditable="true" spellcheck="false">CV. 성우 이름</p>
-                        </div>
-                    </div>
-                </div>
+                     </div>
             </section>
-
         </div>
     </main>
     <script src="script.js"></script>
