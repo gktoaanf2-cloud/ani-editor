@@ -1,41 +1,128 @@
-/* 기존 CSS는 그대로 유지하고 아래 내용 추가 */
+/* SF 미래형 오타쿠 테마 변수 세팅 */
+:root {
+    --theme-color: #00f2fe; /* 컬러 휠로 실시간 변경될 핵심 네온 색상 */
+    --bg-space: #090a10;    /* 깊은 우주색 */
+    --bg-panel: rgba(22, 26, 46, 0.6); /* 투명한 SF 글래스모피즘 판넬 */
+    --text-white: #ffffff;
+    --text-glow: rgba(0, 242, 254, 0.4);
+}
 
-/* 숨겨진 파일 업로드 인풋 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-space);
+    color: var(--text-white);
+    overflow-x: hidden;
+}
+
+/* 상단 SF 제어 바 */
+.navbar {
+    position: fixed; top: 0; width: 100%;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 40px;
+    background: rgba(9, 10, 16, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 1000;
+}
+.nav-left { display: flex; align-items: center; gap: 40px; }
+.logo { font-size: 22px; font-weight: 900; color: var(--theme-color); letter-spacing: 3px; text-shadow: 0 0 10px var(--text-glow); }
+
+/* 컬러 휠 디자인 */
+.color-picker-wrapper { display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 1px; color: #888ba3; }
+#theme-picker {
+    -webkit-appearance: none; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+    background: transparent; box-shadow: 0 0 8px var(--text-glow);
+}
+#theme-picker::-webkit-color-swatch-wrapper { padding: 0; }
+#theme-picker::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; }
+
+/* 공통 미래형 버튼 */
+.btn-primary {
+    background: var(--theme-color); color: #000; border: none; padding: 10px 24px; border-radius: 30px;
+    font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px var(--text-glow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--theme-color); }
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05); color: var(--theme-color); border: 1px solid var(--theme-color);
+    padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s;
+}
+.btn-secondary:hover { background: var(--theme-color); color: #000; }
+
+/* 1. 상단부 SF 히어로 섹션 */
+.hero-section {
+    position: relative; height: 65vh; margin-top: 68px;
+    background: #121526; display: flex; align-items: flex-end; padding: 50px 50px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05); cursor: pointer;
+}
+.hero-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to top, var(--bg-space) 0%, rgba(9, 10, 16, 0.4) 70%, rgba(0,0,0,0.2) 100%);
+}
+.hero-ctrl-zone { position: absolute; top: 30px; right: 40px; z-index: 10; }
+.hero-content { position: relative; z-index: 5; max-width: 700px; }
+.badge {
+    border: 1px solid var(--theme-color); color: var(--theme-color); padding: 4px 12px;
+    font-size: 11px; font-weight: 900; border-radius: 20px; margin-bottom: 15px; display: inline-block;
+    background: rgba(0, 242, 254, 0.05); letter-spacing: 1px;
+}
+.anime-title { font-size: 42px; font-weight: 900; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
+.anime-synopsis { font-size: 15px; line-height: 1.7; margin-bottom: 25px; color: #c4c9e3; text-shadow: 0 1px 5px rgba(0,0,0,0.9); }
+.btn-play { background: var(--theme-color); color: #000; padding: 10px 28px; border: none; border-radius: 20px; font-weight: 800; margin-right: 12px; cursor: pointer; }
+.btn-info { background: rgba(255, 255, 255, 0.1); color: #fff; padding: 10px 28px; border: none; border-radius: 20px; font-weight: 800; cursor: pointer; backdrop-filter: blur(5px); }
+
+/* 2. 하단부 2단 메인 레이아웃 그리드 */
+.main-content-grid {
+    display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; padding: 40px;
+    background-color: var(--bg-space);
+}
+.panel-section {
+    background: var(--bg-panel); border-radius: 24px; padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; }
+.section-title { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: var(--theme-color); }
+
+/* [좌측] 에피소드 리스트 스타일 */
+.episode-list { display: flex; flex-direction: column; gap: 16px; }
+.episode-item {
+    display: flex; gap: 20px; padding: 15px; background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.02); transition: 0.2s;
+}
+.episode-item:hover { background: rgba(255, 255, 255, 0.06); border-color: var(--theme-color); }
+.epi-thumbnail { width: 180px; height: 105px; border-radius: 12px; background: #1a1d36; flex-shrink: 0; position: relative; }
+.epi-details { display: flex; flex-direction: column; justify-content: center; }
+.epi-details h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.epi-runtime { font-size: 12px; color: var(--theme-color); font-weight: 600; margin-bottom: 6px; }
+.epi-desc { font-size: 13.5px; color: #a4a9c6; line-height: 1.5; }
+
+/* [우측] 캐릭터 PV 캐스팅 리스트 스타일 */
+.shorts-container { display: flex; flex-direction: column; gap: 20px; }
+.short-card {
+    background: rgba(255,255,255,0.03); border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.02); transition: 0.3s;
+}
+.short-card:hover { border-color: var(--theme-color); transform: translateY(-3px); }
+.short-img { height: 320px; background: #1a1d36; position: relative; }
+.short-info { padding: 20px; background: linear-gradient(to top, rgba(9,10,16,1), rgba(9,10,16,0.5)); }
+.short-info h4 { font-size: 15.5px; font-weight: 700; line-height: 1.5; margin-bottom: 8px; font-style: italic; color: #e2e5f5; }
+.cv-text { color: var(--theme-color); font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
+
+/* 업로드 트리거 및 인프라 */
 .hidden-input { display: none; }
-
-/* 이미지 업로드 버튼 (메인 배너용) */
-.upload-btn {
-    position: absolute; top: 20px; right: 40px; z-index: 20;
-    background: rgba(0, 0, 0, 0.6); color: white; border: 1px solid white;
-    padding: 8px 16px; border-radius: 4px; cursor: pointer; transition: 0.2s;
-}
-.upload-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-/* 이미지 업로드 힌트 텍스트 */
+.upload-trigger { cursor: pointer; }
 .upload-hint {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; justify-content: center; align-items: center;
-    width: 100%; height: 100%; color: #aaa; font-size: 14px; background: #2a2a2a; cursor: pointer;
+    color: rgba(255, 255, 255, 0.4); font-size: 13px; text-align: center; padding: 10px;
+    font-weight: 600; transition: 0.2s;
 }
-.upload-hint-small {
-    display: flex; justify-content: center; align-items: center;
-    width: 100%; height: 100%; color: #aaa; font-size: 24px; background: #444; cursor: pointer;
-}
+.upload-trigger:hover .upload-hint { color: var(--theme-color); background: rgba(0,0,0,0.4); }
 
-/* 텍스트 편집(contenteditable) 영역 UX */
-[contenteditable="true"] {
-    transition: background 0.2s, outline 0.2s;
-    outline: none;
-    border-radius: 4px;
-}
-[contenteditable="true"]:hover {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
-    cursor: text;
-}
-[contenteditable="true"]:focus {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 0 2px #e50914;
-}
+/* 편집 인디케이터 */
+[contenteditable="true"]:hover { background: rgba(255, 255, 255, 0.05); border-radius: 4px; }
+[contenteditable="true"]:focus { background: rgba(255, 255, 255, 0.1); outline: none; border-radius: 4px; }
 
-/* 캡처 시 숨길 요소들 클래스 */
+/* 캡처 청소용 */
 .hide-on-capture { display: none !important; }
