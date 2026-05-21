@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보스의 오리지널 애니메이션 OTT</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 캡처 기능을 위한 html2canvas 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 세련된 폰트 (Pretendard) -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+</head>
+<body>
+    <!-- 상단 네비게이션 바 -->
+    <header class="navbar">
+        <h1 class="logo">BOSS ORIGINAL</h1>
+        <button id="save-btn" class="btn-primary">이미지로 저장 (영업용)</button>
+    </header>
+
+    <!-- 캡처될 전체 영역 -->
+    <main id="capture-area">
+        
+        <!-- 1. OTT 스타일 메인 배너 -->
+        <section class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <span class="badge">독점 공개</span>
+                <h2 class="anime-title">어둠 속의 톱니바퀴</h2>
+                <p class="anime-synopsis">"우리의 궤도는 애초에 엇갈리도록 설계되어 있었다."<br>두 사람의 필연적인 충돌을 그린 다크 판타지 로맨스.</p>
+                <div class="hero-buttons">
+                    <button class="btn-play">▶ 1화 재생</button>
+                    <button class="btn-info">상세 정보</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 성우 캐스팅 & 대사 숏츠 섹션 (가로 스크롤) -->
+        <section class="shorts-section">
+            <h3 class="section-title">캐릭터 PV & 캐스팅</h3>
+            <div class="shorts-container">
+                <!-- 캐릭터 1 -->
+                <div class="short-card">
+                    <div class="short-img" style="background-color: #2a2a2a;">
+                        <!-- style="background-image: url('캐릭터1.png');" 형태로 이미지를 넣으세요 -->
+                    </div>
+                    <div class="short-info">
+                        <h4>"네가 날 구원할 수 있다고 생각해?"</h4>
+                        <p class="cv-text">CV. 카미야 히로시 (가상 캐스팅)</p>
+                    </div>
+                </div>
+                <!-- 캐릭터 2 -->
+                <div class="short-card">
+                    <div class="short-img" style="background-color: #333;">
+                         <!-- 캐릭터 2 이미지 -->
+                    </div>
+                    <div class="short-info">
+                        <h4>"지옥 끝까지라도 쫓아갈 테니까, 각오해."</h4>
+                        <p class="cv-text">CV. 나카무라 유이치 (가상 캐스팅)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 회차별 소개 에피소드 가이드 -->
+        <section class="episodes-section">
+            <h3 class="section-title">에피소드 목록</h3>
+            <div class="episode-list">
+                <!-- 1화 -->
+                <article class="episode-item">
+                    <div class="epi-thumbnail" style="background-color: #444;"></div>
+                    <div class="epi-details">
+                        <h4>1화: 만남과 균열</h4>
+                        <p class="epi-runtime">24분</p>
+                        <p class="epi-desc">피비린내 나는 골목에서 두 사람은 처음 조우한다. 서로에게 겨눈 총구 너머로 알 수 없는 감정이 피어오르는데...</p>
+                    </div>
+                </article>
+                <!-- 2화 -->
+                <article class="episode-item">
+                    <div class="epi-thumbnail" style="background-color: #555;"></div>
+                    <div class="epi-details">
+                        <h4>2화: 엇갈린 진심</h4>
+                        <p class="epi-runtime">24분</p>
+                        <p class="epi-desc">명령과 감정 사이에서 갈등하는 밤. 누구의 배신으로 이 관계가 끝날 것인가.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
