@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // 1. 실시간 텍스트 동기화
+    // 1. 실시간 제목 & 시놉시스 -> 배경 포스터 동기화
     const editTitle = document.getElementById("edit-title");
     const editDesc = document.getElementById("edit-desc");
     const bgTitleDisplay = document.getElementById("bg-title-display");
@@ -21,10 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.style.setProperty('--theme-glow', hexToRgba(hexColor, 0.4));
     });
 
-    // 3. 수정됨: 이미지 업로드 버그 완벽 해결
+    // 3. 🔥 수정 완료: 업로드 버튼 클릭 버그 완벽 해결 🔥
     document.addEventListener("click", (e) => {
         const trigger = e.target.closest(".upload-trigger");
-        // 버튼(BUTTON) 막던 멍청한 조건 삭제, 인풋(INPUT)만 아니면 업로드창 열림
+        // 버튼을 막던 멍청한 조건을 지웠습니다! 파일 창(INPUT) 중복 실행만 막습니다.
         if (trigger && e.target.tagName !== "INPUT") {
             const fileInput = trigger.querySelector(".hidden-input");
             if (fileInput) fileInput.click();
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { list.scrollTo({ left: list.scrollWidth, behavior: 'smooth' }); }, 50);
     });
 
-    // 5. 항목 삭제
+    // 5. 항목 삭제 (이벤트 위임)
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("btn-delete-char")) {
             e.target.closest(".short-card").remove();
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-// 7. 움짤(WebM) 동영상 화면 녹화 (초강력 스텔스 패치)
+    // 7. 🔥 수정 완료: 움짤(WebM) 동영상 화면 녹화 스마트 스텔스 모드 🔥
     const recordBtn = document.getElementById("record-btn");
     let mediaRecorder;
     let recordedChunks = [];
@@ -134,38 +134,29 @@ document.addEventListener("DOMContentLoaded", () => {
     recordBtn.addEventListener("click", async () => {
         if (mediaRecorder && mediaRecorder.state === "recording") { mediaRecorder.stop(); return; }
         try {
-            alert("💡 안내: 녹화가 시작되면 뜨는 팝업에서 [현재 탭]을 선택하고 '공유'를 눌러주세요!");
+            alert("💡 안내: 녹화 팝업이 뜨면 [현재 탭]을 선택하고 '공유'를 눌러주세요!\n(녹화 중에는 영상 퀄리티를 위해 스크롤바와 화면 내 마우스가 숨겨집니다.)");
             
-            // 영상 자체에서 마우스 커서 영구 제명
             const stream = await navigator.mediaDevices.getDisplayMedia({ 
                 video: { preferCurrentTab: true, cursor: "never" }, 
                 audio: false 
             });
             
-            // UI 숨김 및 버튼 상태 변경
             const uiElements = document.querySelectorAll(".ui-element");
             uiElements.forEach(el => el.classList.add("hide-ui"));
             recordBtn.classList.remove("hide-ui"); 
             recordBtn.classList.add("is-recording");
             recordBtn.innerText = "⏹ 녹화 종료 및 저장";
 
-            // 🔥 초강력 스텔스 패치: 버튼이고 나발이고 모든 요소의 마우스/스크롤 강제 삭제
+            // 스마트 스텔스 CSS: 상단 바(정지 버튼)에는 마우스가 보이고, 애니메이션 영역만 마우스/스크롤 완전 삭제
             const stealthStyle = document.createElement("style");
             stealthStyle.id = "stealth-mode-style";
             stealthStyle.innerHTML = `
-                /* 1. 모든 요소의 마우스 커서 완벽 삭제 */
-                * { cursor: none !important; }
+                /* 녹화되는 핵심 영역만 마우스 숨김 */
+                #capture-area, #capture-area * { cursor: none !important; }
                 
-                /* 2. 스크롤바 영역 자체를 0으로 만들어서 완벽 삭제 */
-                *::-webkit-scrollbar { 
-                    display: none !important; 
-                    width: 0 !important; 
-                    height: 0 !important; 
-                }
-                * { 
-                    -ms-overflow-style: none !important; 
-                    scrollbar-width: none !important; 
-                }
+                /* 스크롤바 완전 박멸 */
+                *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+                * { -ms-overflow-style: none !important; scrollbar-width: none !important; }
             `;
             document.head.appendChild(stealthStyle);
 
@@ -182,17 +173,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
                 stream.getTracks().forEach(track => track.stop());
                 
-                // UI 원상 복구
                 uiElements.forEach(el => el.classList.remove("hide-ui"));
                 recordBtn.classList.remove("is-recording");
                 recordBtn.innerText = "🔴 움짤(WebM) 녹화";
                 
-                // 🔥 복구: 스텔스 스타일 제거 (마우스, 스크롤바 부활)
+                // 스텔스 해제 (마우스/스크롤 부활)
                 const styleToRemove = document.getElementById("stealth-mode-style");
                 if (styleToRemove) styleToRemove.remove();
             };
 
-            // 사용자가 강제로 공유를 중지했을 때의 방어 로직
             stream.getVideoTracks()[0].onended = () => { 
                 if (mediaRecorder.state === "recording") mediaRecorder.stop(); 
             };
@@ -201,10 +190,10 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => { mediaRecorder.start(); }, 500);
         } catch (err) {
             console.error("녹화 취소/에러:", err); 
-            alert("녹화가 취소되었거나 지원하지 않는 브라우저입니다.");
             
-            // 에러 시에도 스텔스 모드는 해제해야 함
+            // 에러 발생 시에도 스텔스 해제는 철저히!
             const styleToRemove = document.getElementById("stealth-mode-style");
             if (styleToRemove) styleToRemove.remove();
         }
     });
+});
