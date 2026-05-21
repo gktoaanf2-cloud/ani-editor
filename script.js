@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-// 7. 움짤(WebM) 동영상 화면 녹화 (마우스 & 스크롤바 완벽 숨김 패치)
+// 7. 움짤(WebM) 동영상 화면 녹화 (초강력 스텔스 패치)
     const recordBtn = document.getElementById("record-btn");
     let mediaRecorder;
     let recordedChunks = [];
@@ -149,17 +149,25 @@ document.addEventListener("DOMContentLoaded", () => {
             recordBtn.classList.add("is-recording");
             recordBtn.innerText = "⏹ 녹화 종료 및 저장";
 
-            // 🔥 패치 1: 사이트 내 마우스 커서 숨김
-            document.body.style.cursor = "none";
-            
-            // 🔥 패치 2: 스크롤바 완벽 삭제 마법 (녹화 중에만 강제 스타일 주입)
-            const noScrollStyle = document.createElement("style");
-            noScrollStyle.id = "hide-scrollbar-style";
-            noScrollStyle.innerHTML = `
-                *::-webkit-scrollbar { display: none !important; }
-                * { -ms-overflow-style: none !important; scrollbar-width: none !important; }
+            // 🔥 초강력 스텔스 패치: 버튼이고 나발이고 모든 요소의 마우스/스크롤 강제 삭제
+            const stealthStyle = document.createElement("style");
+            stealthStyle.id = "stealth-mode-style";
+            stealthStyle.innerHTML = `
+                /* 1. 모든 요소의 마우스 커서 완벽 삭제 */
+                * { cursor: none !important; }
+                
+                /* 2. 스크롤바 영역 자체를 0으로 만들어서 완벽 삭제 */
+                *::-webkit-scrollbar { 
+                    display: none !important; 
+                    width: 0 !important; 
+                    height: 0 !important; 
+                }
+                * { 
+                    -ms-overflow-style: none !important; 
+                    scrollbar-width: none !important; 
+                }
             `;
-            document.head.appendChild(noScrollStyle);
+            document.head.appendChild(stealthStyle);
 
             mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
             recordedChunks = [];
@@ -179,9 +187,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 recordBtn.classList.remove("is-recording");
                 recordBtn.innerText = "🔴 움짤(WebM) 녹화";
                 
-                // 🔥 복구: 마우스 커서 및 스크롤바 다시 보이게 하기
-                document.body.style.cursor = "auto";
-                const styleToRemove = document.getElementById("hide-scrollbar-style");
+                // 🔥 복구: 스텔스 스타일 제거 (마우스, 스크롤바 부활)
+                const styleToRemove = document.getElementById("stealth-mode-style");
                 if (styleToRemove) styleToRemove.remove();
             };
 
@@ -196,9 +203,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("녹화 취소/에러:", err); 
             alert("녹화가 취소되었거나 지원하지 않는 브라우저입니다.");
             
-            // 에러 시에도 마우스와 스크롤바는 복구해줘야 함
-            document.body.style.cursor = "auto"; 
-            const styleToRemove = document.getElementById("hide-scrollbar-style");
+            // 에러 시에도 스텔스 모드는 해제해야 함
+            const styleToRemove = document.getElementById("stealth-mode-style");
             if (styleToRemove) styleToRemove.remove();
         }
     });
