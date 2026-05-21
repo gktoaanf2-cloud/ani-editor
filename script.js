@@ -25,12 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     editTitle.addEventListener("input", syncHeroText);
     editDesc.addEventListener("input", syncHeroText);
+    themePicker.addEventListener("input", (e) => applyThemeColor(e.target.value));
 
     // ==========================================
     // 2. 무결점 오토 세이브 (Local Storage)
     // ==========================================
     let autoSaveTimeout;
-    const MAX_IMG_WIDTH = 1200; // 용량 초과 방지 압축
+    const MAX_IMG_WIDTH = 1200;
 
     function compressImage(file, callback) {
         const reader = new FileReader();
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 canvas.width = width; canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                callback(canvas.toDataURL('image/jpeg', 0.8)); // 80% 압축
+                callback(canvas.toDataURL('image/jpeg', 0.9)); 
             };
             img.src = e.target.result;
         };
@@ -52,13 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function saveState() {
         try {
+            const bgImgElement = document.getElementById("hero-bg-img");
             const state = {
                 themeColor: themePicker.value,
                 heroBadge: document.getElementById("edit-badge").innerText,
                 heroTitle: editTitle.innerText,
                 heroDesc: editDesc.innerText,
                 bgControls: {
-                    img: document.getElementById("hero-bg-layer").style.backgroundImage,
+                    img: (bgImgElement.src && bgImgElement.src.startsWith('data:')) ? bgImgElement.src : "",
                     scale: document.getElementById("bg-scale").value,
                     rotate: document.getElementById("bg-rotate").value,
                     x: document.getElementById("bg-x").value,
@@ -94,12 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 3. HTML 빌더 (빈 이미지 속성 꼬임 방지)
+    // 3. HTML 빌더 (서브 레이어)
     // ==========================================
     function createEpisodeHTML(data) {
         const item = document.createElement("article");
         item.className = "episode-item";
-        const bgStyle = (data.img && data.img !== 'none' && data.img !== 'url("")') ? `background-image: ${data.img};` : '';
+        const bgStyle = (data.img && data.img !== 'none' && data.img !== 'url("")' && data.img.startsWith('url')) ? `background-image: ${data.img};` : '';
         item.innerHTML = `
             <button class="btn-delete btn-delete-epi ui-element">✕</button>
             <div class="epi-thumbnail bg-target upload-trigger" style="${bgStyle}">
@@ -118,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function createCharHTML(data) {
         const item = document.createElement("div");
         item.className = "short-card";
-        const bgStyle = (data.img && data.img !== 'none' && data.img !== 'url("")') ? `background-image: ${data.img};` : '';
+        const bgStyle = (data.img && data.img !== 'none' && data.img !== 'url("")' && data.img.startsWith('url')) ? `background-image: ${data.img};` : '';
         item.innerHTML = `
             <button class="btn-delete btn-delete-char ui-element">✕</button>
             <div class="short-img bg-target upload-trigger" style="${bgStyle}">
@@ -134,38 +136,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 4. 🔥 메인 배경 에디터 패널 (독립 로직으로 충돌 방지) 🔥
+    // 4. 🔥 메인 배경 에디터 패널 (자유 트랜스폼) 🔥
     // ==========================================
-    const bgLayer = document.getElementById("hero-bg-layer");
+    const bgImgElement = document.getElementById("hero-bg-img");
     const bgUploadBtn = document.getElementById("bg-upload-btn");
     const mainUploadInput = document.getElementById("hero-main-upload");
     const bgUploadTrigger = document.getElementById("bg-upload-trigger");
     const bgControls = document.getElementById("bg-controls");
 
-    // JS로 직접 transform을 먹여서 실시간 렌더링 100% 보장
     function applyBgTransforms() {
         const s = document.getElementById("bg-scale").value;
         const r = document.getElementById("bg-rotate").value;
         const x = document.getElementById("bg-x").value;
         const y = document.getElementById("bg-y").value;
-        bgLayer.style.transform = `translate(${x}%, ${y}%) scale(${s}) rotate(${r}deg)`;
+        
+        // CSS 변수에 값을 전달하여 원본 이미지 태그가 잘리지 않고 실시간 변형되도록 처리
+        bgImgElement.style.setProperty('--bg-scale', s);
+        bgImgElement.style.setProperty('--bg-rotate', r);
+        bgImgElement.style.setProperty('--bg-x', x);
+        bgImgElement.style.setProperty('--bg-y', y);
     }
 
     ['bg-scale', 'bg-rotate', 'bg-x', 'bg-y'].forEach(id => {
         document.getElementById(id).addEventListener('input', applyBgTransforms);
     });
 
-    // 메인 배경 버튼 클릭 시 (이벤트 위임과 충돌 방지)
     bgUploadBtn.addEventListener("click", () => {
         mainUploadInput.click();
     });
 
-    // 메인 배경 파일 첨부 완료 시
     mainUploadInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (file) {
             compressImage(file, (compressedDataUrl) => {
-                bgLayer.style.backgroundImage = `url('${compressedDataUrl}')`;
+                bgImgElement.src = compressedDataUrl;
+                bgImgElement.style.display = "block"; // 숨겨뒀던 이미지를 나타나게 함
                 bgUploadTrigger.classList.add("hide-ui");
                 bgControls.classList.remove("hide-ui");
                 triggerAutoSave();
@@ -174,9 +179,9 @@ document.addEventListener("DOMContentLoaded", () => {
         e.target.value = "";
     });
 
-    // 배경 삭제
     document.getElementById("bg-delete-btn").addEventListener("click", () => {
-        bgLayer.style.backgroundImage = "none";
+        bgImgElement.src = "";
+        bgImgElement.style.display = "none";
         document.getElementById("bg-scale").value = 1;
         document.getElementById("bg-rotate").value = 0;
         document.getElementById("bg-x").value = 0;
@@ -188,11 +193,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 5. 캐릭터 및 에피소드 업로드 로직 (메인과 철저히 분리)
+    // 5. 캐릭터 및 에피소드 업로드 (충돌 방지 로직 적용)
     // ==========================================
     document.addEventListener("click", (e) => {
         const trigger = e.target.closest(".upload-trigger");
-        // 메인 배경 업로드가 아닐 때만 작동
         if (trigger && trigger.id !== "bg-upload-trigger" && e.target.tagName !== "INPUT" && e.target.tagName !== "BUTTON") {
             const fileInput = trigger.querySelector(".hidden-input");
             if (fileInput) fileInput.click();
@@ -200,7 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("change", (e) => {
-        // 메인 배경 인풋이 아닐 때만 작동
         if (e.target.classList.contains("hidden-input") && e.target.id !== "hero-main-upload") {
             const file = e.target.files[0];
             const targetElement = e.target.closest(".bg-target");
@@ -233,9 +236,11 @@ document.addEventListener("DOMContentLoaded", () => {
             editDesc.innerText = data.heroDesc || "";
             syncHeroText();
 
-            // 메인 배경 데이터 로드 및 컨트롤러 표시
-            if (data.bgControls && data.bgControls.img && data.bgControls.img !== "none" && data.bgControls.img !== 'url("")') {
-                bgLayer.style.backgroundImage = data.bgControls.img;
+            // 메인 배경 로드
+            if (data.bgControls && data.bgControls.img && data.bgControls.img !== "") {
+                bgImgElement.src = data.bgControls.img;
+                bgImgElement.style.display = "block";
+                
                 document.getElementById("bg-scale").value = data.bgControls.scale || 1;
                 document.getElementById("bg-rotate").value = data.bgControls.rotate || 0;
                 document.getElementById("bg-x").value = data.bgControls.x || 0;
@@ -258,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 data.chars.forEach(char => charList.appendChild(createCharHTML(char)));
             } else { document.getElementById("add-char-btn").click(); }
         } else {
-            // 완전 첫 접속 시
+            // 완전 첫 접속 시 기본 세팅
             applyThemeColor("#00f2fe");
             document.getElementById("add-epi-btn").click();
             document.getElementById("add-char-btn").click();
@@ -266,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 7. 추가/삭제 버튼 동작 (이벤트 위임)
+    // 7. 추가/삭제 버튼 동작
     // ==========================================
     document.getElementById("add-epi-btn").addEventListener("click", () => {
         const list = document.getElementById("episode-list");
@@ -291,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 8. 무결점 캡처 및 화면 녹화 엔진 (스텔스 유지)
+    // 8. 캡처 및 화면 녹화 스텔스 엔진
     // ==========================================
     const saveBtn = document.getElementById("save-btn");
     saveBtn.addEventListener("click", () => {
@@ -365,8 +370,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    themePicker.addEventListener("input", (e) => applyThemeColor(e.target.value));
-
-    // 실행 시작
+    // 9. 실행 시작
     loadState();
 });
