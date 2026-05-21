@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // 1. 실시간 제목 & 시놉시스 -> 배경 포스터 동기화
+    // 1. 실시간 텍스트 동기화
     const editTitle = document.getElementById("edit-title");
     const editDesc = document.getElementById("edit-desc");
     const bgTitleDisplay = document.getElementById("bg-title-display");
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     editTitle.addEventListener("input", () => { bgTitleDisplay.innerText = editTitle.innerText; });
     editDesc.addEventListener("input", () => { bgDescDisplay.innerText = editDesc.innerText; });
 
-    // 2. 테마 컬러 실시간 연동 (글로우 효과 계산)
+    // 2. 테마 컬러 실시간 연동
     const themePicker = document.getElementById("theme-picker");
     function hexToRgba(hex, alpha) {
         let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
@@ -21,10 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.style.setProperty('--theme-glow', hexToRgba(hexColor, 0.4));
     });
 
-    // 3. 이미지 업로드 (위임 처리)
+    // 3. 수정됨: 이미지 업로드 버그 완벽 해결
     document.addEventListener("click", (e) => {
         const trigger = e.target.closest(".upload-trigger");
-        if (trigger && e.target.tagName !== "INPUT" && e.target.tagName !== "BUTTON") {
+        // 버튼(BUTTON) 막던 멍청한 조건 삭제, 인풋(INPUT)만 아니면 업로드창 열림
+        if (trigger && e.target.tagName !== "INPUT") {
             const fileInput = trigger.querySelector(".hidden-input");
             if (fileInput) fileInput.click();
         }
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 4. 에피소드 및 캐릭터 동적 추가 로직
+    // 4. 에피소드 및 캐릭터 동적 추가
     document.getElementById("add-epi-btn").addEventListener("click", () => {
         const list = document.getElementById("episode-list");
         const newEpi = document.createElement("article");
@@ -86,11 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
         list.appendChild(newChar);
-        // 캐릭터 추가 시 오른쪽 끝으로 부드럽게 스크롤
         setTimeout(() => { list.scrollTo({ left: list.scrollWidth, behavior: 'smooth' }); }, 50);
     });
 
-    // 5. 🔥 신규: 에피소드 및 캐릭터 삭제 로직 (이벤트 위임)
+    // 5. 항목 삭제
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("btn-delete-char")) {
             e.target.closest(".short-card").remove();
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 6. 무결점 이미지 캡처 (PNG)
+    // 6. 이미지 캡처 (PNG)
     const saveBtn = document.getElementById("save-btn");
     saveBtn.addEventListener("click", () => {
         if (document.activeElement) document.activeElement.blur(); 
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 7. 움짤(WebM) 동영상 화면 녹화 엔진
+    // 7. 움짤(WebM) 동영상 화면 녹화 (UI 숨김 버그 해결 완료)
     const recordBtn = document.getElementById("record-btn");
     let mediaRecorder;
     let recordedChunks = [];
