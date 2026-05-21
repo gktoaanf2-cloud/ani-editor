@@ -31,24 +31,25 @@ body { background-color: var(--bg-deep); color: #ffffff; overflow-x: hidden; }
 .btn-glass { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; backdrop-filter: blur(4px); white-space: nowrap; flex-shrink: 0; }
 .btn-glass:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--theme-color); }
 
-/* 🔥 독립된 배경 레이어 및 컨트롤러 CSS 🔥 */
+/* 🔥 1px 틈새 방어를 위한 히어로 섹션 재설계 🔥 */
 .hero-section { position: relative; height: 60vh; margin-top: 70px; background: #11131a; display: flex; align-items: flex-end; padding: 60px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 10; overflow: hidden; }
+
+/* 2px씩 강제로 찢어 늘려서 소수점 렌더링 틈새 차단 */
 .hero-bg-layer {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+    position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; z-index: 1;
     background-size: cover; background-position: center; background-repeat: no-repeat;
-    /* JS 슬라이더 값이 실시간으로 변수에 들어옵니다 */
-    transform: translate(calc(var(--bg-x, 0) * 1%), calc(var(--bg-y, 0) * 1%)) scale(var(--bg-scale, 1)) rotate(calc(var(--bg-rotate, 0) * 1deg));
     transition: transform 0.05s ease-out;
 }
-.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, var(--bg-deep) 0%, rgba(5,6,8,0.3) 100%); z-index: 2; pointer-events: none; }
-.hero-upload-ui { position: absolute; top: 30px; right: 40px; z-index: 20; display: flex; flex-direction: column; align-items: flex-end; }
 
-/* 배경 에디터 (글래스모피즘) */
-.bg-controls {
-    margin-top: 10px; background: rgba(18, 20, 28, 0.85); backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 15px;
-    width: 260px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+/* 오버레이도 똑같이 2px 늘려서 완전히 덮어씌움 */
+.hero-overlay { 
+    position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(to top, var(--bg-deep) 0%, rgba(5,6,8,0.7) 15%, rgba(5,6,8,0.1) 100%); 
+    z-index: 2; pointer-events: none; 
 }
+
+.hero-upload-ui { position: absolute; top: 30px; right: 40px; z-index: 20; display: flex; flex-direction: column; align-items: flex-end; }
+.bg-controls { margin-top: 10px; background: rgba(18, 20, 28, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 15px; width: 260px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .control-group { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: #cbd0e1; }
 input[type=range] { -webkit-appearance: none; width: 150px; background: transparent; }
 input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
@@ -87,4 +88,24 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px
 .epi-runtime { font-size: 13px; font-weight: 700; margin-bottom: 6px; outline: none; }
 .epi-desc { font-size: 14px; color: #a4a9c6; line-height: 1.6; outline: none; }
 
-.shorts-container { display: flex; flex-direction: row; gap: 20px; overflow-x: auto; overflow-y: hidden; padding-bottom: 15px; width:
+.shorts-container { display: flex; flex-direction: row; gap: 20px; overflow-x: auto; overflow-y: hidden; padding-bottom: 15px; width: 100%; }
+.shorts-container::-webkit-scrollbar { height: 8px; }
+.shorts-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+.shorts-container::-webkit-scrollbar-thumb { background: var(--theme-color); border-radius: 4px; }
+.short-card { position: relative; width: 220px; flex-shrink: 0; display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 24px; overflow: hidden; transition: 0.3s; }
+.short-card:hover { border-color: var(--theme-color); box-shadow: 0 0 20px var(--theme-glow); transform: translateY(-4px); }
+.short-img { height: 320px; background: #181a25; position: relative; flex-shrink: 0; background-size: cover; background-position: center; }
+.short-info { padding: 20px; background: linear-gradient(to top, rgba(18,20,28,1), rgba(18,20,28,0.4)); flex-grow: 1; }
+.short-info h4 { font-size: 15px; font-weight: 800; margin-bottom: 10px; font-style: italic; line-height: 1.5; color: #e2e5f5; outline: none; }
+.cv-text { font-size: 13.5px; font-weight: 800; letter-spacing: 0.5px; outline: none; }
+
+.btn-delete { position: absolute; top: 10px; right: 10px; z-index: 20; width: 28px; height: 28px; background: rgba(0, 0, 0, 0.6); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; font-size: 14px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; backdrop-filter: blur(4px); }
+.btn-delete:hover { background: #ff4757; color: white; border-color: #ff4757; transform: scale(1.1); }
+
+.hidden-input { display: none; }
+.upload-trigger { cursor: pointer; }
+.upload-hint { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; color: rgba(255, 255, 255, 0.5); font-size: 14px; font-weight: 700; background: rgba(0,0,0,0.2); transition: 0.3s; }
+.upload-trigger:hover .upload-hint { background: rgba(0,0,0,0.5); color: #fff; }
+[contenteditable="true"] { outline: none; transition: 0.2s; border-radius: 4px; }
+[contenteditable="true"]:hover { background: rgba(255, 255, 255, 0.05); }
+[contenteditable="true"]:focus { background: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 1px var(--theme-color); }
