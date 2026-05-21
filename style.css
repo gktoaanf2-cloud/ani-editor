@@ -31,17 +31,26 @@ body { background-color: var(--bg-deep); color: #ffffff; overflow-x: hidden; }
 .btn-glass { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; backdrop-filter: blur(4px); white-space: nowrap; flex-shrink: 0; }
 .btn-glass:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--theme-color); }
 
-/* 🔥 1px 틈새 방어를 위한 히어로 섹션 재설계 🔥 */
+/* 🔥 배경 레이어 및 1px 틈새 방어 🔥 */
 .hero-section { position: relative; height: 60vh; margin-top: 70px; background: #11131a; display: flex; align-items: flex-end; padding: 60px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 10; overflow: hidden; }
 
-/* 2px씩 강제로 찢어 늘려서 소수점 렌더링 틈새 차단 */
 .hero-bg-layer {
     position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; z-index: 1;
-    background-size: cover; background-position: center; background-repeat: no-repeat;
-    transition: transform 0.05s ease-out;
+    overflow: hidden; /* 이미지 밖으로 삐져나가는 잉여 부분 마스크 처리 */
 }
 
-/* 오버레이도 똑같이 2px 늘려서 완전히 덮어씌움 */
+/* 🔥 핵심: 원본 비율을 완벽 보존하는 자유자재 이미지 태그 🔥 */
+#hero-bg-img {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100%; /* 기본적으로 가로 길이를 채웁니다. 모자라면 사용자가 스케일로 키우면 됩니다! */
+    height: auto;
+    /* CSS 변수로 스크립트의 이동/확대 값을 실시간 적용 */
+    transform: translate(-50%, -50%) translate(calc(var(--bg-x, 0) * 1%), calc(var(--bg-y, 0) * 1%)) scale(var(--bg-scale, 1)) rotate(calc(var(--bg-rotate, 0) * 1deg));
+    transition: transform 0.05s ease-out;
+    display: none;
+}
+
 .hero-overlay { 
     position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
     background: linear-gradient(to top, var(--bg-deep) 0%, rgba(5,6,8,0.7) 15%, rgba(5,6,8,0.1) 100%); 
