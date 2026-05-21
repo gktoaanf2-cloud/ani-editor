@@ -119,3 +119,93 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+/* ========================================================
+       🔥 신규 추가: 애니메이션 화면 녹화 (WebM 내보내기) 엔진 🔥
+    ======================================================== */
+    const recordBtn = document.getElementById("record-btn");
+    let mediaRecorder;
+    let recordedChunks = [];
+
+    recordBtn.addEventListener("click", async () => {
+        // 이미 녹화 중이라면 녹화를 중지합니다.
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
+            return;
+        }
+
+        try {
+            alert("💡 안내: 녹화가 시작되면 뜨는 팝업에서 [현재 탭]을 선택하고 '공유'를 눌러주세요!");
+            
+            // 화면 캡처 권한 요청 (오디오 제외, 현재 탭 우선)
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: { preferCurrentTab: true },
+                audio: false
+            });
+
+            // UI 요소 (버튼, 인풋 등) 숨기기
+            const uiElements = document.querySelectorAll(".ui-element");
+            uiElements.forEach(el => el.classList.add("hide-ui"));
+
+            // 녹화 버튼 상태 변경
+            recordBtn.classList.remove("hide-ui"); // 녹화 버튼만은 보이게 유지
+            recordBtn.classList.add("is-recording");
+            recordBtn.innerText = "⏹ 녹화 종료 및 저장";
+
+            // WebM 포맷으로 녹화 설정
+            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            recordedChunks = [];
+
+            // 데이터가 들어올 때마다 배열에 저장
+            mediaRecorder.ondataavailable = function(e) {
+                if (e.data.size > 0) {
+                    recordedChunks.push(e.data);
+                }
+            };
+
+            // 녹화가 종료되었을 때의 처리
+            mediaRecorder.onstop = function() {
+                // Blob 객체로 영상 파일(WebM) 생성
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                
+                // 가상의 a태그를 만들어 다운로드 실행
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'ARCH_ORIGINAL_ANIMATION.webm';
+                document.body.appendChild(a);
+                a.click();
+                
+                // 찌꺼기 청소
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+
+                // 스트림 종료 (브라우저 상단의 화면 공유 아이콘 끄기)
+                stream.getTracks().forEach(track => track.stop());
+
+                // UI 및 버튼 원상 복구
+                uiElements.forEach(el => el.classList.remove("hide-ui"));
+                recordBtn.classList.remove("is-recording");
+                recordBtn.innerText = "🔴 움짤(WebM) 녹화";
+            };
+
+            // 유저가 화면 공유 팝업에서 '공유 중지'를 직접 눌렀을 때의 방어 로직
+            stream.getVideoTracks()[0].onended = function () {
+                if (mediaRecorder.state === "recording") {
+                    mediaRecorder.stop();
+                }
+            };
+
+            // 에디터 포커스 아웃 후 0.5초 대기 후 녹화 시작 (글리치 효과 제대로 나오게)
+            if (document.activeElement) document.activeElement.blur();
+            setTimeout(() => {
+                mediaRecorder.start();
+            }, 500);
+
+        } catch (err) {
+            console.error("녹화 취소 또는 에러 발생:", err);
+            alert("녹화가 취소되었거나 지원하지 않는 브라우저입니다.");
+        }
+    });
