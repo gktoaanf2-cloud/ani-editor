@@ -6,25 +6,24 @@
     --bg-panel: rgba(18, 20, 28, 0.65);
 }
 
-/* 프리텐다드 폰트 강제 고정 */
+/* 폰트 & 기본 리셋 */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif !important; }
 body { background-color: var(--bg-deep); color: #ffffff; overflow-x: hidden; }
 
-/* 캡처 영역 설정 (애니메이션을 품기 위한 기준점) */
+/* 유틸리티: UI 숨김 처리 (캡처/녹화 시) */
+.hide-ui { display: none !important; }
+.theme-text { color: var(--theme-color) !important; text-shadow: 0 0 10px var(--theme-glow); }
+.theme-border { border-color: var(--theme-color) !important; box-shadow: inset 0 0 10px var(--theme-glow), 0 0 10px var(--theme-glow); }
+
+/* 캡처 베이스 영역 */
 #capture-area { position: relative; width: 100%; min-height: 100vh; overflow: hidden; background-color: var(--bg-deep); }
 
-/* 🔥 움직이는 전자 회선(Circuit) 배경 애니메이션 🔥 */
+/* 🔥 사이버펑크 회선(Circuit) + 스캔라인 애니메이션 🔥 */
 .circuit-bg {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;
-    /* 회로도 패턴 생성 */
-    background-image: 
-        linear-gradient(var(--theme-glow) 1px, transparent 1px),
-        linear-gradient(90deg, var(--theme-glow) 1px, transparent 1px);
-    background-size: 60px 60px; /* 격자 크기 */
-    opacity: 0.15;
-    animation: grid-move 20s linear infinite;
+    background-image: linear-gradient(var(--theme-glow) 1px, transparent 1px), linear-gradient(90deg, var(--theme-glow) 1px, transparent 1px);
+    background-size: 60px 60px; opacity: 0.15; animation: grid-move 20s linear infinite;
 }
-/* 스캔라인 (위아래로 움직이는 레이저 빔 효과) */
 .circuit-bg::after {
     content: ""; position: absolute; top: -50%; left: 0; width: 100%; height: 25vh;
     background: linear-gradient(to bottom, transparent, var(--theme-color), transparent);
@@ -33,175 +32,97 @@ body { background-color: var(--bg-deep); color: #ffffff; overflow-x: hidden; }
 @keyframes grid-move { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
 @keyframes scanline { 0% { top: -30%; } 100% { top: 120%; } }
 
-/* 테마 유틸리티 */
-.theme-text { color: var(--theme-color) !important; text-shadow: 0 0 10px var(--theme-glow); }
-.theme-border { border-color: var(--theme-color) !important; box-shadow: inset 0 0 10px var(--theme-glow), 0 0 10px var(--theme-glow); }
-
-/* 네비게이션 */
+/* 네비게이션 & 컨트롤러 */
 .navbar {
-    position: fixed; top: 0; width: 100%; height: 70px;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0 40px; background: rgba(5, 6, 8, 0.85); backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000;
+    position: fixed; top: 0; width: 100%; height: 70px; display: flex; justify-content: space-between; align-items: center;
+    padding: 0 40px; background: rgba(5, 6, 8, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000;
 }
 .nav-left { display: flex; align-items: center; gap: 30px; }
+.nav-right { display: flex; gap: 10px; }
 .logo { font-size: 24px; font-weight: 900; letter-spacing: 2px; }
-
-/* 컬러 휠 디테일 */
 .color-picker-wrapper { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; color: #888; }
 #theme-picker { -webkit-appearance: none; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; background: transparent; box-shadow: 0 0 12px var(--theme-glow); }
 #theme-picker::-webkit-color-swatch-wrapper { padding: 0; }
 #theme-picker::-webkit-color-swatch { border: 2px solid #fff; border-radius: 50%; }
 
-/* 버튼 류 (줄바꿈 방지 적용) */
+/* 상단 컨트롤러 버튼 */
 .btn-primary { background: var(--theme-color); color: #000; font-weight: 800; padding: 12px 28px; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 0 20px var(--theme-glow); transition: 0.3s; white-space: nowrap; }
 .btn-primary:hover { filter: brightness(1.2); transform: translateY(-2px); }
+.btn-record { background: transparent; color: #ff4757; font-weight: 800; padding: 12px 20px; border: 2px solid #ff4757; border-radius: 30px; cursor: pointer; box-shadow: 0 0 10px rgba(255, 71, 87, 0.4); transition: 0.3s; white-space: nowrap; }
+.btn-record:hover { background: rgba(255, 71, 87, 0.1); }
+.is-recording { background: #ff4757 !important; color: #fff !important; animation: record-pulse 1.5s infinite; }
+@keyframes record-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); } }
 .btn-secondary { background: transparent; color: #fff; padding: 12px 28px; border: 1px solid #fff; border-radius: 30px; font-weight: 800; cursor: pointer; white-space: nowrap; }
 .btn-glass { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; backdrop-filter: blur(4px); white-space: nowrap; flex-shrink: 0; }
 .btn-glass:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--theme-color); }
 
-/* 1. 상단 히어로 배너 */
-.hero-section { position: relative; height: 60vh; margin-top: 70px; background: #11131a; display: flex; align-items: flex-end; padding: 60px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 10; }
-.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, var(--bg-deep) 0%, rgba(5,6,8,0.3) 100%); }
+/* 1. 상단 히어로 배너 & 애니메이션 */
+.hero-section { position: relative; height: 60vh; margin-top: 70px; background: #11131a; display: flex; align-items: flex-end; padding: 60px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 10; overflow: hidden; }
+.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, var(--bg-deep) 0%, rgba(5,6,8,0.3) 100%); z-index: 2; }
 .hero-upload-ui { position: absolute; top: 30px; right: 40px; z-index: 20; }
 .hero-content { position: relative; z-index: 10; max-width: 800px; }
+
+/* 얌전한 실제 입력 텍스트 */
 .badge { padding: 6px 14px; font-size: 12px; font-weight: 900; border-radius: 20px; background: rgba(0,0,0,0.4); display: inline-block; margin-bottom: 16px; }
-.anime-title { font-size: 48px; font-weight: 900; margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
-.anime-synopsis { font-size: 16px; line-height: 1.7; color: #cbd0e1; margin-bottom: 30px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+.anime-title { font-size: 48px; font-weight: 900; margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.8); transition: 0.2s; outline: none; }
+.anime-synopsis { font-size: 16px; line-height: 1.7; color: #cbd0e1; margin-bottom: 30px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); transition: 0.2s; outline: none; }
 .hero-buttons { display: flex; gap: 15px; }
 
-/* 2. 메인 2단 그리드 */
-.main-content-grid {
-    display: grid; 
-    grid-template-columns: 1fr 1fr; /* 반반 비율로 안정적 분배 */
-    gap: 40px; padding: 40px 60px; max-width: 1800px; margin: 0 auto;
-    align-items: start; position: relative; z-index: 10;
-}
+/* 🔥 배경 거대 포스터 텍스트 (Cinematic Overlay) 🔥 */
+.hero-bg-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; text-align: center; z-index: 5; pointer-events: none; }
+#bg-title-display { font-size: clamp(60px, 8vw, 150px); font-weight: 900; line-height: 1.1; color: transparent; -webkit-text-stroke: 2px rgba(255, 255, 255, 0.4); text-shadow: 0 0 30px var(--theme-glow); animation: cinematic-slam 8s infinite; }
+#bg-desc-display { font-size: clamp(16px, 2vw, 30px); color: rgba(255, 255, 255, 0.5); margin-top: 20px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.8); animation: cinematic-fade 8s infinite; }
+@keyframes cinematic-slam { 0%, 10% { opacity: 0; transform: scale(1.5); } 15% { opacity: 0.25; transform: scale(1); } 17% { transform: scale(1.02); } 20% { transform: scale(1); } 70% { opacity: 0.2; transform: scale(1.05); filter: blur(0); } 85%, 100% { opacity: 0; transform: scale(1.1); filter: blur(10px); } }
+@keyframes cinematic-fade { 0%, 20% { opacity: 0; transform: translateY(20px); } 30%, 70% { opacity: 0.2; transform: translateY(0); } 80%, 100% { opacity: 0; transform: translateY(-10px); } }
 
-/* 패널 공통 */
-.panel-section { background: var(--bg-panel); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 32px; padding: 35px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
-/* 버튼 깨짐 방지를 위해 flex-wrap 추가 */
+/* 🔥 심장 박동(EKG) 애니메이션 🔥 */
+.btn-with-pulse { display: flex; align-items: center; }
+.heartbeat-svg { width: 90px; height: 35px; margin-left: 15px; overflow: visible; }
+.heartbeat-line { fill: none; stroke: var(--theme-color); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 200; stroke-dashoffset: 200; animation: heartbeat-draw 3s infinite linear; filter: drop-shadow(0 0 5px var(--theme-glow)); }
+@keyframes heartbeat-draw { 0% { stroke-dashoffset: 200; opacity: 0; } 10% { opacity: 1; } 40% { stroke-dashoffset: 0; opacity: 1; } 60% { stroke-dashoffset: -200; opacity: 1; } 100% { stroke-dashoffset: -200; opacity: 0; } }
+
+/* 2. 메인 레이아웃 (좌우 2단 그리드) */
+.main-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 40px 60px; max-width: 1800px; margin: 0 auto; align-items: start; position: relative; z-index: 10; min-width: 0; }
+.panel-section { background: var(--bg-panel); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 32px; padding: 35px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); min-width: 0; /* 그리드 터짐 방지 */ }
 .panel-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; }
 .section-title { font-size: 20px; font-weight: 900; letter-spacing: 1px; flex-grow: 1; }
 
 /* [좌측] 에피소드 리스트 */
 .episode-list { display: flex; flex-direction: column; gap: 20px; }
-.episode-item { display: flex; gap: 20px; padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 20px; transition: 0.3s; }
+.episode-item { position: relative; display: flex; gap: 20px; padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 20px; transition: 0.3s; }
 .episode-item:hover { border-color: var(--theme-color); background: rgba(255, 255, 255, 0.05); box-shadow: 0 0 15px var(--theme-glow); }
 .epi-thumbnail { width: 160px; height: 90px; border-radius: 12px; background: #181a25; flex-shrink: 0; position: relative; overflow: hidden; }
 .epi-details { display: flex; flex-direction: column; justify-content: center; }
-.epi-details h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
-.epi-runtime { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-.epi-desc { font-size: 14px; color: #a4a9c6; line-height: 1.6; }
+.epi-details h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; outline: none; }
+.epi-runtime { font-size: 13px; font-weight: 700; margin-bottom: 6px; outline: none; }
+.epi-desc { font-size: 14px; color: #a4a9c6; line-height: 1.6; outline: none; }
 
-/* [우측] 캐릭터 PV 리스트 (오른쪽으로 무한 스와이프 기능) */
-.shorts-container {
-    display: flex; flex-direction: row; gap: 20px;
-    overflow-x: auto; /* 가로 스크롤 활성화 */
-    overflow-y: hidden;
-    padding-bottom: 15px; /* 스크롤바 공간 확보 */
-}
-/* SF 느낌의 커스텀 스크롤바 */
+/* [우측] 캐릭터 PV 리스트 (가로 스와이프) */
+.shorts-container { display: flex; flex-direction: row; gap: 20px; overflow-x: auto; overflow-y: hidden; padding-bottom: 15px; width: 100%; }
 .shorts-container::-webkit-scrollbar { height: 8px; }
 .shorts-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
 .shorts-container::-webkit-scrollbar-thumb { background: var(--theme-color); border-radius: 4px; }
-
-/* 세로로 길쭉한 숏츠 비율의 캐릭터 카드 */
-.short-card {
-    width: 220px; /* 고정 가로폭 (카드가 늘어나지 않음) */
-    flex-shrink: 0; /* 카드가 찌그러지는 것을 방지 */
-    display: flex; flex-direction: column;
-    background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03);
-    border-radius: 24px; overflow: hidden; transition: 0.3s;
-}
+.short-card { position: relative; width: 220px; flex-shrink: 0; display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 24px; overflow: hidden; transition: 0.3s; }
 .short-card:hover { border-color: var(--theme-color); box-shadow: 0 0 20px var(--theme-glow); transform: translateY(-4px); }
 .short-img { height: 320px; background: #181a25; position: relative; flex-shrink: 0; }
 .short-info { padding: 20px; background: linear-gradient(to top, rgba(18,20,28,1), rgba(18,20,28,0.4)); flex-grow: 1; }
-.short-info h4 { font-size: 15px; font-weight: 800; margin-bottom: 10px; font-style: italic; line-height: 1.5; color: #e2e5f5; }
-.cv-text { font-size: 13.5px; font-weight: 800; letter-spacing: 0.5px; }
+.short-info h4 { font-size: 15px; font-weight: 800; margin-bottom: 10px; font-style: italic; line-height: 1.5; color: #e2e5f5; outline: none; }
+.cv-text { font-size: 13.5px; font-weight: 800; letter-spacing: 0.5px; outline: none; }
 
-/* 기타 유틸리티 */
+/* 🔥 캐릭터/회차 삭제 버튼 디자인 🔥 */
+.btn-delete {
+    position: absolute; top: 10px; right: 10px; z-index: 20;
+    width: 28px; height: 28px; background: rgba(0, 0, 0, 0.6); color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; font-size: 14px;
+    display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; backdrop-filter: blur(4px);
+}
+.btn-delete:hover { background: #ff4757; color: white; border-color: #ff4757; transform: scale(1.1); }
+
+/* 기타 업로드 UI & 에디터 */
 .hidden-input { display: none; }
 .upload-trigger { cursor: pointer; }
 .upload-hint { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; color: rgba(255, 255, 255, 0.5); font-size: 14px; font-weight: 700; background: rgba(0,0,0,0.2); transition: 0.3s; }
 .upload-trigger:hover .upload-hint { background: rgba(0,0,0,0.5); color: #fff; }
-[contenteditable="true"] { outline: none; transition: 0.2s; border-radius: 6px; }
+[contenteditable="true"] { outline: none; transition: 0.2s; border-radius: 4px; }
 [contenteditable="true"]:hover { background: rgba(255, 255, 255, 0.05); }
 [contenteditable="true"]:focus { background: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 1px var(--theme-color); }
-.hide-ui { display: none !important; }
-
-/* =========================================
-   🔥 SF 애니메이션 특수 효과 구역 🔥 
-========================================= */
-
-/* 1. 얌전해진 진짜 입력 텍스트 (글리치 삭제) */
-.anime-title { font-size: 48px; font-weight: 900; margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.8); transition: 0.2s; }
-.anime-synopsis { font-size: 16px; line-height: 1.7; color: #cbd0e1; margin-bottom: 30px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); transition: 0.2s; }
-
-/* 2. 🔥 신규: 배경 포스터 텍스트 오버레이 (20% 투명도) 🔥 */
-.hero-bg-text {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    text-align: center;
-    z-index: 5; /* 배경보다는 위, 실제 입력칸보다는 아래 */
-    pointer-events: none; /* 유저의 마우스 클릭 방해 금지 */
-}
-
-#bg-title-display {
-    /* 배경 텍스트는 화면에 꽉 차게 거대하게 */
-    font-size: clamp(60px, 8vw, 150px);
-    font-weight: 900;
-    line-height: 1.1;
-    color: transparent; 
-    /* 글자 속은 투명하게, 외곽선만 네온으로 빛나게 (포스터 간지) */
-    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.4);
-    text-shadow: 0 0 30px var(--theme-glow);
-    /* 쾅 나타나고 서서히 페이드인/아웃 반복 */
-    animation: cinematic-slam 8s infinite;
-}
-
-#bg-desc-display {
-    font-size: clamp(16px, 2vw, 30px);
-    color: rgba(255, 255, 255, 0.5);
-    margin-top: 20px;
-    font-weight: 700;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    /* 타이틀보다 살짝 늦게 등장 */
-    animation: cinematic-fade 8s infinite;
-}
-
-/* 쾅 내리찍으며 20% 오버레이로 나타나는 애니메이션 */
-@keyframes cinematic-slam {
-    0%, 10% { opacity: 0; transform: scale(1.5); }
-    15% { opacity: 0.25; transform: scale(1); } /* 쾅! */
-    17% { transform: scale(1.02); } /* 여운 진동 */
-    20% { transform: scale(1); }
-    /* 서서히 커지며 20% 오버레이 유지 */
-    70% { opacity: 0.2; transform: scale(1.05); filter: blur(0); }
-    85%, 100% { opacity: 0; transform: scale(1.1); filter: blur(10px); } /* 안개처럼 페이드아웃 */
-}
-
-/* 서브타이틀 서서히 페이드인 애니메이션 */
-@keyframes cinematic-fade {
-    0%, 20% { opacity: 0; transform: translateY(20px); }
-    30%, 70% { opacity: 0.2; transform: translateY(0); }
-    80%, 100% { opacity: 0; transform: translateY(-10px); }
-}
-
-/* 3. 상세정보 옆 심장 박동(EKG) 주파선 (유지) */
-.btn-with-pulse { display: flex; align-items: center; }
-.heartbeat-svg { width: 90px; height: 35px; margin-left: 15px; overflow: visible; }
-.heartbeat-line {
-    fill: none; stroke: var(--theme-color); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
-    stroke-dasharray: 200; stroke-dashoffset: 200;
-    animation: heartbeat-draw 3s infinite linear; filter: drop-shadow(0 0 5px var(--theme-glow));
-}
-@keyframes heartbeat-draw {
-    0% { stroke-dashoffset: 200; opacity: 0; }
-    10% { opacity: 1; }
-    40% { stroke-dashoffset: 0; opacity: 1; }
-    60% { stroke-dashoffset: -200; opacity: 1; }
-    100% { stroke-dashoffset: -200; opacity: 0; }
-}
