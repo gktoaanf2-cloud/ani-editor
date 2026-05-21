@@ -9,76 +9,83 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 </head>
 <body>
+    <!-- 상단 네비게이션 -->
     <header class="navbar">
         <div class="nav-left">
-            <h1 class="logo">ARCH ORIGINAL</h1>
+            <h1 class="logo target-color" contenteditable="true" spellcheck="false">ARCH ORIGINAL</h1>
+            <!-- 테마 컨트롤러 -->
             <div class="color-picker-wrapper">
                 <label for="theme-picker">THEME SYSTEM</label>
                 <input type="color" id="theme-picker" value="#00f2fe">
             </div>
         </div>
-        <button id="save-btn" class="btn-primary">📸 오리지널 스크린샷 캡처</button>
+        <button id="save-btn" class="btn-primary">📸 스크린샷 저장</button>
     </header>
 
     <main id="capture-area">
-        
-        <section class="hero-section bg-target upload-trigger" id="hero-bg">
+        <!-- 메인 배너 -->
+        <section class="hero-section bg-target upload-trigger">
             <div class="hero-overlay"></div>
             <input type="file" class="hidden-input" accept="image/*">
             
             <div class="hero-ctrl-zone">
-                <span class="upload-hint">🛸 클릭하여 메인 배너 배경 이미지 업로드</span>
+                <span class="upload-hint">클릭하여 메인 배경 업로드</span>
             </div>
 
             <div class="hero-content">
-                <span class="badge" contenteditable="true" spellcheck="false">ARCH EXCLUSIVE</span>
-                <h2 class="anime-title" contenteditable="true" spellcheck="false">여기를 클릭해 애니메이션 제목 입력</h2>
-                <p class="anime-synopsis" contenteditable="true" spellcheck="false">"우리의 세계선은 이 우주가 종말하기 전, 단 한 번 겹치도록 설계되었다."<br>클릭 후 앤캐/자캐의 웅장한 SF 스페이스 오페라 세계관 세계관 및 시놉시스를 작성하세요.</p>
+                <span class="badge target-color target-border target-bg-glow" contenteditable="true" spellcheck="false">ARCH EXCLUSIVE</span>
+                <h2 class="anime-title" contenteditable="true" spellcheck="false">작품 제목을 입력하세요</h2>
+                <p class="anime-synopsis" contenteditable="true" spellcheck="false">"우리의 우주는 단 한 번 겹치도록 설계되었다."<br>클릭하여 앤캐/자캐의 설정과 시놉시스를 자유롭게 작성하세요.</p>
                 <div class="hero-buttons">
-                    <button class="btn-play" contenteditable="true" spellcheck="false">▶ 시청하기</button>
-                    <button class="btn-info" contenteditable="true" spellcheck="false">자세히 보기</button>
+                    <button class="btn-primary target-bg" contenteditable="true" spellcheck="false">▶ 재생</button>
+                    <button class="btn-info" contenteditable="true" spellcheck="false">상세 정보</button>
                 </div>
             </div>
         </section>
 
+        <!-- 2단 레이아웃 (레이아웃 붕괴 방지 적용) -->
         <div class="main-content-grid">
             
-            <section class="panel-section left-panel">
+            <!-- [좌측] 에피소드 패널 -->
+            <section class="panel-section">
                 <div class="panel-header">
-                    <h3 class="section-title" contenteditable="true" spellcheck="false">에피소드 가이드</h3>
-                    <button id="add-epi-btn" class="btn-secondary">+ 회차 추가</button>
+                    <h3 class="section-title target-color" contenteditable="true" spellcheck="false">EPISODE GUIDE</h3>
+                    <button id="add-epi-btn" class="btn-secondary target-color target-border">+ 회차 추가</button>
                 </div>
                 
-                <div class="episode-list" id="episode-list">
+                <!-- 내부 스크롤 영역 -->
+                <div class="scroll-container" id="episode-list">
                     <article class="episode-item">
                         <div class="epi-thumbnail bg-target upload-trigger">
                             <input type="file" class="hidden-input" accept="image/*">
                             <span class="upload-hint">+</span>
                         </div>
                         <div class="epi-details">
-                            <h4 contenteditable="true" spellcheck="false">제 1화: 프롤로그 - 조우의 궤도</h4>
-                            <p class="epi-runtime" contenteditable="true" spellcheck="false">24min</p>
-                            <p class="epi-desc" contenteditable="true" spellcheck="false">우주 정거장 아크(ARCH)에서 운명적으로 조우한 두 사람. 엇갈린 연성 로그 속 숨겨진 진실이 밝혀진다.</p>
+                            <h4 contenteditable="true" spellcheck="false">제 1화: 프롤로그</h4>
+                            <p class="epi-runtime target-color" contenteditable="true" spellcheck="false">24min</p>
+                            <p class="epi-desc" contenteditable="true" spellcheck="false">에피소드 줄거리를 작성하세요. 텍스트가 길어져도 레이아웃은 무너지지 않습니다.</p>
                         </div>
                     </article>
                 </div>
             </section>
 
-            <section class="panel-section right-panel">
+            <!-- [우측] 캐릭터 패널 -->
+            <section class="panel-section">
                 <div class="panel-header">
-                    <h3 class="section-title" contenteditable="true" spellcheck="false">캐릭터 PV & CASTING</h3>
-                    <button id="add-char-btn" class="btn-secondary">+ 캐릭터 추가</button>
+                    <h3 class="section-title target-color" contenteditable="true" spellcheck="false">CASTING & PV</h3>
+                    <button id="add-char-btn" class="btn-secondary target-color target-border">+ 캐릭터 추가</button>
                 </div>
                 
-                <div class="shorts-container" id="shorts-container">
+                <!-- 내부 스크롤 영역 -->
+                <div class="scroll-container" id="shorts-container">
                     <div class="short-card">
                         <div class="short-img bg-target upload-trigger">
                             <input type="file" class="hidden-input" accept="image/*">
-                            <span class="upload-hint">클릭하여 이미지 업로드</span>
+                            <span class="upload-hint">이미지 업로드</span>
                         </div>
                         <div class="short-info">
-                            <h4 contenteditable="true" spellcheck="false">"이 우주가 끝나더라도, 난 네 손을 놓지 않아."</h4>
-                            <p class="cv-text" contenteditable="true" spellcheck="false">CV. 원하는 성우 입력 (가상)</p>
+                            <h4 contenteditable="true" spellcheck="false">"지옥 끝까지 쫓아갈 테니까."</h4>
+                            <p class="cv-text target-color" contenteditable="true" spellcheck="false">CV. 원하는 성우 입력</p>
                         </div>
                     </div>
                 </div>
