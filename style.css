@@ -129,3 +129,96 @@ body { background-color: var(--bg-deep); color: #ffffff; overflow-x: hidden; }
 [contenteditable="true"]:hover { background: rgba(255, 255, 255, 0.05); }
 [contenteditable="true"]:focus { background: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 1px var(--theme-color); }
 .hide-ui { display: none !important; }
+
+/* =========================================
+   🔥 SF 애니메이션 특수 효과 구역 🔥 
+========================================= */
+
+/* 1. 타이틀 & 서브타이틀 쾅쾅 나타나는 효과 */
+/* 꿀팁: 마우스로 클릭해서 '수정 중(focus)'일 때는 글자가 도망가지 않도록 애니메이션을 멈춥니다! */
+.anime-title:not(:focus) {
+    animation: slam-glitch 6s infinite;
+}
+.anime-synopsis:not(:focus) {
+    animation: fade-pulse 6s infinite;
+}
+
+@keyframes slam-glitch {
+    /* 처음엔 사라져 있다가 쾅! 하고 스케일이 줄어들며 등장 */
+    0%, 15% { opacity: 0; transform: scale(2) translateY(-20px); text-shadow: 0 0 40px var(--theme-color); }
+    18% { opacity: 1; transform: scale(1) translateY(0); text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+    /* 지직거리는 글리치(진동) 효과 */
+    20% { transform: scale(1.02) translateX(3px); }
+    22% { transform: scale(1) translateX(-3px); }
+    24% { transform: scale(1) translateX(0); }
+    /* 한동안 유지되다가 다시 사라짐 */
+    70% { opacity: 1; transform: scale(1); filter: brightness(1); }
+    75% { opacity: 1; filter: brightness(2); }
+    80%, 100% { opacity: 0; transform: scale(0.9); }
+}
+
+@keyframes fade-pulse {
+    /* 타이틀보다 아주 살짝 늦게 올라오며 등장 */
+    0%, 20% { opacity: 0; transform: translateY(15px); }
+    25%, 75% { opacity: 1; transform: translateY(0); }
+    80%, 100% { opacity: 0; transform: translateY(-15px); }
+}
+
+/* 2. 상세정보 옆 심장 박동(EKG) 주파선 애니메이션 */
+.btn-with-pulse {
+    display: flex;
+    align-items: center;
+}
+
+.heartbeat-svg {
+    width: 90px;
+    height: 35px;
+    margin-left: 15px;
+    overflow: visible;
+}
+
+.heartbeat-line {
+    fill: none;
+    stroke: var(--theme-color); /* 테마 색상 자동 연동 */
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* 선을 점선으로 만들고 밀어내서 그려지는 효과를 냄 */
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: heartbeat-draw 3s infinite linear;
+    filter: drop-shadow(0 0 5px var(--theme-glow)); /* 네온 글로우 */
+}
+
+@keyframes heartbeat-draw {
+    0% { stroke-dashoffset: 200; opacity: 0; }
+    10% { opacity: 1; }
+    40% { stroke-dashoffset: 0; opacity: 1; }
+    60% { stroke-dashoffset: -200; opacity: 1; }
+    100% { stroke-dashoffset: -200; opacity: 0; }
+}
+
+/* 우측 상단 버튼 컨테이너 */
+.nav-right { display: flex; gap: 10px; }
+
+/* 녹화 버튼 기본 스타일 */
+.btn-record {
+    background: transparent; color: #ff4757; font-weight: 800;
+    padding: 12px 20px; border: 2px solid #ff4757; border-radius: 30px;
+    cursor: pointer; box-shadow: 0 0 10px rgba(255, 71, 87, 0.4);
+    transition: 0.3s; white-space: nowrap;
+}
+.btn-record:hover { background: rgba(255, 71, 87, 0.1); }
+
+/* 녹화가 진행 중일 때 애니메이션 (깜빡임) */
+.is-recording {
+    background: #ff4757 !important;
+    color: #fff !important;
+    animation: record-pulse 1.5s infinite;
+}
+
+@keyframes record-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+}
