@@ -1,4 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
+    
+    // ==========================================
+    // 🔥 신규: 입력한 텍스트를 배경 포스터에 실시간 동기화
+    // ==========================================
+    const editTitle = document.getElementById("edit-title");
+    const editDesc = document.getElementById("edit-desc");
+    const bgTitleDisplay = document.getElementById("bg-title-display");
+    const bgDescDisplay = document.getElementById("bg-desc-display");
+
+    // 제목을 수정할 때마다 배경 텍스트 변경
+    editTitle.addEventListener("input", () => {
+        bgTitleDisplay.innerText = editTitle.innerText;
+    });
+
+    // 시놉시스를 수정할 때마다 배경 서브타이틀 변경
+    editDesc.addEventListener("input", () => {
+        bgDescDisplay.innerText = editDesc.innerText;
+    });
+
+    // (아래부터는 기존의 테마 컬러 연동, 무한 증식, 캡처, 녹화 코드 그대로 유지!)
+    // ...
     const themePicker = document.getElementById("theme-picker");
     
     function hexToRgba(hex, alpha) {
