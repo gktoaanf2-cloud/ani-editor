@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCH ORIGINAL</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 </head>
 <body>
-    <!-- 상단 SF 네비게이션 바 -->
     <header class="navbar">
         <div class="nav-left">
             <h1 class="logo theme-text">ARCH ORIGINAL</h1>
@@ -22,11 +21,12 @@
     </header>
 
     <main id="capture-area">
-        <!-- 1. 상단 메인 배너 (배경 커스텀 영역) -->
+        
+        <div class="circuit-bg"></div>
+
         <section class="hero-section" id="hero-bg">
             <div class="hero-overlay"></div>
             
-            <!-- 직관적인 상단 배경 업로드 버튼 -->
             <div class="hero-upload-ui ui-element upload-trigger">
                 <input type="file" class="hidden-input" accept="image/*">
                 <button class="btn-glass">⏏ 상단 배경 이미지 업로드</button>
@@ -43,11 +43,9 @@
             </div>
         </section>
 
-        <!-- 2. 절대 무너지지 않는 2단 Grid 레이아웃 -->
         <div class="main-content-grid">
             
-            <!-- [좌측 칸] 애니메이션 회차 가이드 -->
-            <section class="panel-section">
+            <section class="panel-section left-panel">
                 <div class="panel-header">
                     <h3 class="section-title theme-text" contenteditable="true" spellcheck="false">EPISODE GUIDE</h3>
                     <button id="add-epi-btn" class="btn-glass ui-element theme-text">+ 회차 추가</button>
@@ -68,8 +66,7 @@
                 </div>
             </section>
 
-            <!-- [우측 칸] 캐릭터 PV & 캐스팅 -->
-            <section class="panel-section">
+            <section class="panel-section right-panel">
                 <div class="panel-header">
                     <h3 class="section-title theme-text" contenteditable="true" spellcheck="false">CHARACTER & CASTING</h3>
                     <button id="add-char-btn" class="btn-glass ui-element theme-text">+ 캐릭터 추가</button>
@@ -79,11 +76,11 @@
                     <div class="short-card">
                         <div class="short-img bg-target upload-trigger">
                             <input type="file" class="hidden-input" accept="image/*">
-                            <span class="upload-hint ui-element">클릭하여 일러스트 업로드</span>
+                            <span class="upload-hint ui-element">이미지 업로드</span>
                         </div>
                         <div class="short-info">
                             <h4 contenteditable="true" spellcheck="false">"이 우주가 끝나더라도, 난 네 손을 놓지 않아."</h4>
-                            <p class="cv-text theme-text" contenteditable="true" spellcheck="false">CV. 성우 이름 (가상)</p>
+                            <p class="cv-text theme-text" contenteditable="true" spellcheck="false">CV. 성우 이름</p>
                         </div>
                     </div>
                 </div>
