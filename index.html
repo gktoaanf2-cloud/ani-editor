@@ -28,18 +28,17 @@
 
         <section class="hero-section" id="hero-bg">
             <div class="hero-bg-layer" id="hero-bg-layer"></div>
-            
             <div class="hero-overlay"></div>
             
-            <div class="hero-bg-text">
+            <div class="hero-bg-text ui-element">
                 <h2 id="bg-title-display">작품의 타이틀을 입력하세요</h2>
                 <p id="bg-desc-display">"우리의 궤도는 우주가 멸망하기 전, 단 한 번 겹치도록 설계되었다."</p>
             </div>
             
             <div class="hero-upload-ui ui-element">
-                <div id="bg-upload-trigger" class="upload-trigger">
+                <div id="bg-upload-trigger">
                     <input type="file" class="hidden-input" id="hero-main-upload" accept="image/*">
-                    <button class="btn-glass">⏏ 메인 포스터 업로드</button>
+                    <button class="btn-glass" id="bg-upload-btn">⏏ 메인 포스터 업로드</button>
                 </div>
                 
                 <div class="bg-controls hide-ui" id="bg-controls">
@@ -72,7 +71,7 @@
                     <button class="btn-primary" contenteditable="true" spellcheck="false">▶ 시청하기</button>
                     <div class="btn-with-pulse">
                         <button class="btn-secondary theme-text theme-border" contenteditable="true" spellcheck="false">상세 정보</button>
-                        <svg class="heartbeat-svg" viewBox="0 0 100 30">
+                        <svg class="heartbeat-svg ui-element" viewBox="0 0 100 30">
                             <path class="heartbeat-line" d="M0,15 H20 L25,5 L35,28 L45,0 L55,15 H100"></path>
                         </svg>
                     </div>
