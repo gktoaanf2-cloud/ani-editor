@@ -3,83 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>보스의 OTT 애니메이션 생성기</title>
+    <title>ARCH ORIGINAL - 오리지널 애니메이션 생성기</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 </head>
 <body>
     <header class="navbar">
-        <h1 class="logo" contenteditable="true" spellcheck="false">MY ORIGINAL</h1>
-        <button id="save-btn" class="btn-primary">📸 내 뇌피셜 애니 캡처하기</button>
+        <div class="nav-left">
+            <h1 class="logo">ARCH ORIGINAL</h1>
+            <div class="color-picker-wrapper">
+                <label for="theme-picker">THEME SYSTEM</label>
+                <input type="color" id="theme-picker" value="#00f2fe">
+            </div>
+        </div>
+        <button id="save-btn" class="btn-primary">📸 오리지널 스크린샷 캡처</button>
     </header>
 
     <main id="capture-area">
-        <!-- 1. 커스텀 메인 배너 -->
-        <section class="hero-section" id="hero-bg">
+        
+        <section class="hero-section bg-target upload-trigger" id="hero-bg">
             <div class="hero-overlay"></div>
-            <!-- 배경 이미지 변경을 위한 숨겨진 인풋 -->
-            <input type="file" id="hero-upload" accept="image/*" class="hidden-input">
-            <button class="upload-btn" onclick="document.getElementById('hero-upload').click()">배경 이미지 변경</button>
+            <input type="file" class="hidden-input" accept="image/*">
+            
+            <div class="hero-ctrl-zone">
+                <span class="upload-hint">🛸 클릭하여 메인 배너 배경 이미지 업로드</span>
+            </div>
 
             <div class="hero-content">
-                <span class="badge" contenteditable="true" spellcheck="false">독점 공개</span>
-                <h2 class="anime-title" contenteditable="true" spellcheck="false">애니메이션 제목을 입력하세요</h2>
-                <p class="anime-synopsis" contenteditable="true" spellcheck="false">"이곳을 클릭하여 앤캐와의 찌통 서사를 요약해보세요."<br>두 사람의 필연적인 충돌을 그린 다크 판타지 로맨스.</p>
+                <span class="badge" contenteditable="true" spellcheck="false">ARCH EXCLUSIVE</span>
+                <h2 class="anime-title" contenteditable="true" spellcheck="false">여기를 클릭해 애니메이션 제목 입력</h2>
+                <p class="anime-synopsis" contenteditable="true" spellcheck="false">"우리의 세계선은 이 우주가 종말하기 전, 단 한 번 겹치도록 설계되었다."<br>클릭 후 앤캐/자캐의 웅장한 SF 스페이스 오페라 세계관 세계관 및 시놉시스를 작성하세요.</p>
                 <div class="hero-buttons">
-                    <button class="btn-play" contenteditable="true" spellcheck="false">▶ 1화 재생</button>
-                    <button class="btn-info" contenteditable="true" spellcheck="false">상세 정보</button>
+                    <button class="btn-play" contenteditable="true" spellcheck="false">▶ 시청하기</button>
+                    <button class="btn-info" contenteditable="true" spellcheck="false">자세히 보기</button>
                 </div>
             </div>
         </section>
 
-        <!-- 2. 성우 캐스팅 & 대사 커스텀 섹션 -->
-        <section class="shorts-section">
-            <h3 class="section-title" contenteditable="true" spellcheck="false">캐릭터 PV & 캐스팅</h3>
-            <div class="shorts-container">
-                <!-- 캐릭터 1 -->
-                <div class="short-card">
-                    <input type="file" id="char1-upload" accept="image/*" class="hidden-input">
-                    <div class="short-img" id="char1-bg" onclick="document.getElementById('char1-upload').click()">
-                        <span class="upload-hint">클릭하여 캐릭터 이미지 업로드</span>
-                    </div>
-                    <div class="short-info">
-                        <h4 contenteditable="true" spellcheck="false">"캐릭터의 명대사를 적어주세요."</h4>
-                        <p class="cv-text" contenteditable="true" spellcheck="false">CV. 원하는 성우 (가상)</p>
-                    </div>
+        <div class="main-content-grid">
+            
+            <section class="panel-section left-panel">
+                <div class="panel-header">
+                    <h3 class="section-title" contenteditable="true" spellcheck="false">에피소드 가이드</h3>
+                    <button id="add-epi-btn" class="btn-secondary">+ 회차 추가</button>
                 </div>
-                <!-- 캐릭터 2 -->
-                <div class="short-card">
-                    <input type="file" id="char2-upload" accept="image/*" class="hidden-input">
-                    <div class="short-img" id="char2-bg" onclick="document.getElementById('char2-upload').click()">
-                        <span class="upload-hint">클릭하여 캐릭터 이미지 업로드</span>
-                    </div>
-                    <div class="short-info">
-                        <h4 contenteditable="true" spellcheck="false">"상대방의 명대사를 적어주세요."</h4>
-                        <p class="cv-text" contenteditable="true" spellcheck="false">CV. 원하는 성우 (가상)</p>
-                    </div>
+                
+                <div class="episode-list" id="episode-list">
+                    <article class="episode-item">
+                        <div class="epi-thumbnail bg-target upload-trigger">
+                            <input type="file" class="hidden-input" accept="image/*">
+                            <span class="upload-hint">+</span>
+                        </div>
+                        <div class="epi-details">
+                            <h4 contenteditable="true" spellcheck="false">제 1화: 프롤로그 - 조우의 궤도</h4>
+                            <p class="epi-runtime" contenteditable="true" spellcheck="false">24min</p>
+                            <p class="epi-desc" contenteditable="true" spellcheck="false">우주 정거장 아크(ARCH)에서 운명적으로 조우한 두 사람. 엇갈린 연성 로그 속 숨겨진 진실이 밝혀진다.</p>
+                        </div>
+                    </article>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 3. 회차별 소개 에피소드 커스텀 -->
-        <section class="episodes-section">
-            <h3 class="section-title" contenteditable="true" spellcheck="false">에피소드 목록</h3>
-            <div class="episode-list">
-                <!-- 1화 -->
-                <article class="episode-item">
-                    <input type="file" id="epi1-upload" accept="image/*" class="hidden-input">
-                    <div class="epi-thumbnail" id="epi1-bg" onclick="document.getElementById('epi1-upload').click()">
-                        <span class="upload-hint-small">+</span>
+            <section class="panel-section right-panel">
+                <div class="panel-header">
+                    <h3 class="section-title" contenteditable="true" spellcheck="false">캐릭터 PV & CASTING</h3>
+                    <button id="add-char-btn" class="btn-secondary">+ 캐릭터 추가</button>
+                </div>
+                
+                <div class="shorts-container" id="shorts-container">
+                    <div class="short-card">
+                        <div class="short-img bg-target upload-trigger">
+                            <input type="file" class="hidden-input" accept="image/*">
+                            <span class="upload-hint">클릭하여 이미지 업로드</span>
+                        </div>
+                        <div class="short-info">
+                            <h4 contenteditable="true" spellcheck="false">"이 우주가 끝나더라도, 난 네 손을 놓지 않아."</h4>
+                            <p class="cv-text" contenteditable="true" spellcheck="false">CV. 원하는 성우 입력 (가상)</p>
+                        </div>
                     </div>
-                    <div class="epi-details">
-                        <h4 contenteditable="true" spellcheck="false">1화: 에피소드 제목</h4>
-                        <p class="epi-runtime" contenteditable="true" spellcheck="false">24분</p>
-                        <p class="epi-desc" contenteditable="true" spellcheck="false">이곳을 클릭해 에피소드의 줄거리를 작성하세요. 커뮤 뛰었던 첫 만남 로그를 요약하면 좋습니다.</p>
-                    </div>
-                </article>
-            </div>
-        </section>
+                </div>
+            </section>
+
+        </div>
     </main>
     <script src="script.js"></script>
 </body>
